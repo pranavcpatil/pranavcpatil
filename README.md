@@ -1,16 +1,17 @@
-## Hi there 👋
+# Hi, I'm Pranav 👋
 
-<!--
-**pranavcpatil/pranavcpatil** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+🎯 Aspiring Data Analyst  
+📊 Skilled in Excel, Power BI, SQL  
+💻 Background in Web Development  
 
-Here are some ideas to get you started:
+## 🚀 Projects
+- Amazon Sales Dashboard (Power BI)
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## 📈 Skills
+- Power BI
+- SQL
+- Excel
+- Data Visualization
+
+## 📫 Connect with me
+- LinkedIn: https://www.linkedin.com/in/pranav-patil-7b7972346/

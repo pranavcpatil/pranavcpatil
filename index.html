@@ -1,0 +1,1895 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pranav Patil — Data Analyst</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f3f6f5;
+        --cell: #ffffff;
+        --grid: #d7dedc;
+        --grid-strong: #b9c4c1;
+        --ink: #1b2430;
+        --muted: #63707a;
+        --green: #1d6f42;
+        --green-dark: #124a2c;
+        --green-tint: #e7f2ec;
+        --blue: #2c5aa0;
+        --amber: #db9a2c;
+        --row-h: 34px;
+        --panel: #fbfcfc;
+        --blue-tint: #eff4fa;
+        --blue-tint-border: #c4d3e8;
+        --amber-tint: #fbf3e4;
+        --amber-tint-border: #ead3a8;
+        --amber-ink: #8a6218;
+        --sql-kw: #7c4dbf;
+        --sql-str: #c2703d;
+        --sql-fn: #1d8a82;
+        --sql-num: #b0472e;
+        --sql-comment: #8a97a0;
+        --sql-bg: #1b2430;
+        --sql-bg-line: #242f3d;
+        --accent-grad: linear-gradient(
+          90deg,
+          var(--green) 0%,
+          var(--blue) 100%
+        );
+      }
+      body[data-theme="dark"] {
+        --bg: #12181a;
+        --cell: #1a2225;
+        --grid: #2b3538;
+        --grid-strong: #3b474a;
+        --ink: #e7eeec;
+        --muted: #93a2a0;
+        --green: #2fa366;
+        --green-dark: #8fe0b4;
+        --green-tint: #173226;
+        --blue: #6fa3e0;
+        --amber: #e8b95c;
+        --panel: #20292c;
+        --blue-tint: #1c2733;
+        --blue-tint-border: #33475c;
+        --amber-tint: #2e2618;
+        --amber-tint-border: #5a4a28;
+        --amber-ink: #e8b95c;
+        --sql-kw: #b79ce8;
+        --sql-str: #e0a470;
+        --sql-fn: #5bc2b8;
+        --sql-num: #e08a6f;
+        --sql-comment: #6b7a82;
+        --sql-bg: #0f1518;
+        --sql-bg-line: #182024;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease;
+      }
+      .mono {
+        font-family: "IBM Plex Mono", monospace;
+      }
+      a {
+        color: inherit;
+      }
+      ::selection {
+        background: var(--amber);
+        color: #1b2430;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.001ms !important;
+          transition-duration: 0.001ms !important;
+        }
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        background: var(--accent-grad);
+        z-index: 60;
+        transition: width 0.08s linear;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .reveal.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ===== App chrome ===== */
+      .titlebar {
+        background: #124a2c;
+        color: #eaf3ee;
+        padding: 9px 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        letter-spacing: 0.02em;
+      }
+      .titlebar .fx {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+      }
+      .titlebar .fname {
+        opacity: 0.92;
+      }
+      .titlebar .fpath {
+        opacity: 0.55;
+        margin-left: auto;
+      }
+      @media (max-width: 560px) {
+        .titlebar .fpath {
+          display: none;
+        }
+        .titlebar .theme-toggle {
+          margin-left: auto;
+        }
+      }
+
+      .theme-toggle {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11.5px;
+        color: #eaf3ee;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 3px;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
+      .theme-toggle-icon {
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      .formulabar {
+        display: flex;
+        align-items: stretch;
+        background: var(--cell);
+        border-bottom: 1px solid var(--grid-strong);
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+      .cellref {
+        width: 74px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--green-dark);
+        background: var(--green-tint);
+        border-right: 1px solid var(--grid-strong);
+      }
+      .fx-label {
+        width: 30px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "IBM Plex Mono", monospace;
+        color: var(--muted);
+        border-right: 1px solid var(--grid);
+        font-style: italic;
+        font-size: 14px;
+      }
+      .fx-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+      }
+
+      .colheaders {
+        display: none;
+      }
+
+      /* ===== Nav / sheet tabs ===== */
+      .sheet-tabs {
+        position: sticky;
+        top: 41px;
+        z-index: 39;
+        display: flex;
+        background: var(--bg);
+        border-bottom: 2px solid var(--grid-strong);
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .sheet-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .sheet-tab {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        padding: 9px 16px;
+        color: var(--muted);
+        background: var(--cell);
+        border: 1px solid var(--grid);
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+        margin: 6px 3px 0 0;
+        cursor: pointer;
+        white-space: nowrap;
+        position: relative;
+        transition:
+          color 0.15s ease,
+          background 0.15s ease,
+          transform 0.15s ease;
+      }
+      .sheet-tab:first-child {
+        margin-left: 8px;
+      }
+      .sheet-tab:hover {
+        color: var(--ink);
+        transform: translateY(-1px);
+      }
+      .sheet-tab.active {
+        color: var(--green-dark);
+        background: var(--green-tint);
+        border-color: var(--grid-strong);
+        font-weight: 600;
+      }
+      .sheet-tab.active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -2px;
+        height: 2px;
+        background: var(--green);
+      }
+
+      section {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 56px 20px 60px;
+        scroll-margin-top: 92px;
+      }
+
+      .rownum {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+
+      /* ===== SQL Console ===== */
+      .sql-console {
+        border: 1px solid var(--grid-strong);
+        background: var(--sql-bg);
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 26px;
+        box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.35);
+      }
+      .sql-console-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 12px;
+        background: var(--sql-bg-line);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .sql-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .sql-dot.r {
+        background: #e5675f;
+      }
+      .sql-dot.y {
+        background: #e8b84f;
+      }
+      .sql-dot.g {
+        background: #5fbf6e;
+      }
+      .sql-console-title {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: #8fa0aa;
+        margin-left: 6px;
+      }
+      .sql-run {
+        margin-left: auto;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11.5px;
+        color: #0f1518;
+        background: var(--green);
+        border: none;
+        padding: 5px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition:
+          filter 0.15s ease,
+          transform 0.15s ease;
+      }
+      .sql-run:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+      }
+      .sql-body {
+        padding: 18px 20px 16px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 14px;
+        line-height: 1.8;
+      }
+      .sql-line {
+        display: flex;
+      }
+      .sql-lineno {
+        width: 24px;
+        flex: none;
+        color: #4a5a63;
+        user-select: none;
+      }
+      .sql-code {
+        color: #d6e2e6;
+        white-space: pre-wrap;
+      }
+      .sql-code .kw {
+        color: var(--sql-kw);
+        font-weight: 600;
+      }
+      .sql-code .fn {
+        color: var(--sql-fn);
+      }
+      .sql-code .str {
+        color: var(--sql-str);
+      }
+      .sql-code .num {
+        color: var(--sql-num);
+      }
+      .sql-code .cm {
+        color: var(--sql-comment);
+        font-style: italic;
+      }
+      .sql-caret {
+        display: inline-block;
+        width: 7px;
+        height: 16px;
+        background: #5fbf6e;
+        vertical-align: -3px;
+        margin-left: 1px;
+        animation: blink 1s steps(1) infinite;
+      }
+      .sql-result {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 12px 20px 16px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: #5fbf6e;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
+      }
+      .sql-result.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .hero {
+        padding-top: 52px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        border: 1px solid var(--grid-strong);
+        background: var(--cell);
+      }
+      .hero-rowlabels {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--grid);
+        background: var(--panel);
+      }
+      .hero-rowlabels span {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        border-bottom: 1px solid var(--grid);
+        padding: 0 10px;
+      }
+      .hero-body {
+        padding: 34px 34px 30px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: var(--green-dark);
+        background: var(--green-tint);
+        border: 1px solid var(--grid-strong);
+        padding: 4px 9px;
+        border-radius: 3px;
+        margin-bottom: 18px;
+      }
+      .eyebrow::before {
+        content: "●";
+        color: var(--green);
+        font-size: 8px;
+      }
+      h1.name {
+        font-size: clamp(34px, 5vw, 52px);
+        font-weight: 700;
+        margin: 0 0 6px;
+        line-height: 1.08;
+        letter-spacing: -0.01em;
+      }
+      .role-line {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 16px;
+        color: var(--blue);
+        margin: 0 0 22px;
+      }
+      .role-line .caret {
+        display: inline-block;
+        width: 9px;
+        height: 18px;
+        background: var(--amber);
+        margin-left: 2px;
+        vertical-align: -3px;
+        animation: blink 1.1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      .hero-desc {
+        max-width: 60ch;
+        color: var(--muted);
+        font-size: 16px;
+        margin-bottom: 26px;
+      }
+      .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 22px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        color: var(--muted);
+        margin-bottom: 28px;
+      }
+      .hero-meta span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .btn {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        padding: 11px 18px;
+        border-radius: 3px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--grid-strong);
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .btn-primary {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green-dark);
+      }
+      .btn-primary:hover {
+        box-shadow: 0 4px 12px rgba(29, 111, 66, 0.28);
+      }
+      .btn-ghost {
+        background: var(--cell);
+        color: var(--ink);
+      }
+
+      /* ===== Section heading ===== */
+      .sec-head {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 26px;
+        border-bottom: 2px solid var(--grid-strong);
+        padding-bottom: 10px;
+      }
+      .sec-head .range {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: var(--green-dark);
+        background: var(--green-tint);
+        border: 1px solid var(--grid-strong);
+        padding: 2px 8px;
+        border-radius: 3px;
+      }
+      .sec-head h2 {
+        font-size: 24px;
+        margin: 0;
+        font-weight: 700;
+      }
+
+      /* ===== About ===== */
+      .about-table {
+        border: 1px solid var(--grid-strong);
+        background: var(--cell);
+      }
+      .about-row {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        border-bottom: 1px solid var(--grid);
+      }
+      .about-row:last-child {
+        border-bottom: none;
+      }
+      .about-row .k {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: var(--green-dark);
+        background: var(--panel);
+        padding: 14px 14px;
+        border-right: 1px solid var(--grid);
+      }
+      .about-row .v {
+        padding: 14px 16px;
+        color: var(--ink);
+      }
+
+      /* Hero profile photo layout */
+      .hero-profile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 35px;
+      }
+
+      .hero-profile-text {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .hero-photo {
+        width: 170px;
+        height: 190px;
+        flex-shrink: 0;
+        overflow: hidden;
+        border: 2px solid var(--grid-strong);
+        border-radius: 8px;
+      }
+
+      .hero-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      @media (max-width: 600px) {
+        .hero-profile {
+          flex-direction: column-reverse;
+          align-items: flex-start;
+          gap: 20px;
+        }
+
+        .hero-photo {
+          width: 135px;
+          height: 150px;
+        }
+      }
+
+      /* ===== Skills ===== */
+      .skills-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 680px) {
+        .skills-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+      .skill-panel {
+        border: 1px solid var(--grid-strong);
+        background: var(--cell);
+      }
+      .skill-panel .panel-title {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: #fff;
+        background: #1b2430;
+        padding: 9px 14px;
+      }
+      .chip-grid {
+        display: flex;
+        flex-wrap: wrap;
+        .chip.blue {
+          border-color: var(--blue-tint-border);
+          background: var(--blue-tint);
+          color: var(--blue);
+        }
+        .chip.amber {
+          border-color: var(--amber-tint-border);
+          background: var(--amber-tint);
+          color: var(--amber-ink);
+        }
+      }
+      .chip {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        padding: 7px 11px;
+        border: 1px solid var(--grid-strong);
+        border-radius: 3px;
+        background: var(--panel);
+        color: var(--ink);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          border-color 0.15s ease;
+      }
+      .chip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.28);
+        border-color: var(--green);
+      }
+      .chip.blue {
+        border-color: var(--blue-tint-border);
+        background: var(--blue-tint);
+        color: var(--blue);
+      }
+      .chip.amber {
+        border-color: var(--amber-tint-border);
+        background: var(--amber-tint);
+        color: var(--amber-ink);
+      }
+
+      /* ===== Resume ===== */
+      .resume-card {
+        border: 1px solid var(--grid-strong);
+        background: var(--cell);
+        display: grid;
+        grid-template-columns: 1fr 240px;
+      }
+      @media (max-width: 680px) {
+        .resume-card {
+          grid-template-columns: 1fr;
+        }
+      }
+      .resume-left {
+        padding: 28px 30px;
+      }
+      .resume-left p {
+        color: var(--muted);
+        margin: 0 0 16px;
+      }
+      .resume-left ul {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--ink);
+      }
+      .resume-left li {
+        margin-bottom: 6px;
+      }
+      .resume-right {
+        border-left: 1px solid var(--grid);
+        background: var(--panel);
+        padding: 26px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+      }
+      @media (max-width: 680px) {
+        .resume-right {
+          border-left: none;
+          border-top: 1px solid var(--grid);
+        }
+      }
+      .file-icon {
+        width: 54px;
+        height: 66px;
+        border: 2px solid var(--green);
+        border-radius: 4px;
+        position: relative;
+        background: var(--green-tint);
+      }
+      .file-icon::before {
+        content: "PDF";
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--green-dark);
+      }
+      .file-note {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      /* ===== Resume Section ===== */
+
+      .resume-card {
+        display: grid;
+        grid-template-columns: 3fr 1.1fr;
+        border: 1px solid var(--grid-strong);
+        background: var(--cell);
+      }
+
+      .resume-info {
+        padding: 30px 38px;
+      }
+
+      .resume-intro {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.8;
+        margin: 0 0 18px;
+      }
+
+      .resume-highlights {
+        padding-left: 22px;
+        margin: 0;
+        line-height: 2.1;
+        font-size: 15px;
+      }
+
+      .resume-note {
+        margin-top: 22px;
+        color: var(--green-dark);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+      }
+
+      .resume-download {
+        border-left: 1px solid var(--grid-strong);
+        background: var(--cell-alt, var(--cell));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 20px;
+        gap: 16px;
+      }
+
+      .resume-pdf-icon {
+        width: 68px;
+        height: 82px;
+        border: 2px solid var(--green);
+        border-radius: 6px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 12px;
+        color: var(--green);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .resume-download-btn {
+        display: inline-block;
+        padding: 14px 20px;
+        background: var(--green);
+        color: white;
+        border: 1px solid var(--green);
+        border-radius: 4px;
+        text-decoration: none;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        text-align: center;
+        transition: opacity 0.2s ease;
+      }
+
+      .resume-download-btn:hover {
+        opacity: 0.85;
+      }
+
+      .resume-view-link {
+        color: var(--blue);
+        font-size: 13px;
+        text-decoration: underline;
+      }
+
+      .resume-free-text {
+        color: var(--muted);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        text-align: center;
+      }
+
+      @media (max-width: 680px) {
+        .resume-card {
+          grid-template-columns: 1fr;
+        }
+
+        .resume-info {
+          padding: 22px;
+        }
+
+        .resume-download {
+          border-left: none;
+          border-top: 1px solid var(--grid-strong);
+        }
+      }
+
+      /* ===== Projects ===== */
+      .proj-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        border: 1px solid var(--grid-strong);
+        background: var(--cell);
+        font-size: 14.5px;
+      }
+
+      .proj-table th,
+      .proj-table td {
+        box-sizing: border-box;
+        text-align: left;
+        overflow-wrap: break-word;
+      }
+
+      .proj-table th {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11.5px;
+        color: #fff;
+        background: #1b2430;
+        padding: 10px 14px;
+      }
+
+      .proj-table td {
+        padding: 16px 14px;
+        border-bottom: 1px solid var(--grid);
+        border-right: 1px solid var(--grid);
+        vertical-align: top;
+      }
+
+      .proj-table td:last-child {
+        border-right: none;
+      }
+
+      .proj-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .proj-table tbody tr {
+        transition: background 0.15s ease;
+      }
+
+      .proj-table tbody tr:hover {
+        background: var(--green-tint);
+      }
+
+      .proj-name {
+        font-weight: 600;
+      }
+
+      .status-pill {
+        display: inline-block;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 11px;
+        background: var(--amber-tint);
+        color: var(--amber-ink);
+        border: 1px solid var(--amber-tint-border);
+        white-space: nowrap;
+      }
+
+      .tools-list span {
+        display: inline-block;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        background: var(--panel);
+        border: 1px solid var(--grid);
+        padding: 3px 7px;
+        border-radius: 3px;
+        margin: 0 4px 4px 0;
+      }
+
+      .proj-note {
+        margin-top: 14px;
+        font-size: 13px;
+        color: var(--muted);
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      @media (max-width: 680px) {
+        .proj-table {
+          min-width: 700px;
+        }
+
+        #projects {
+          overflow-x: auto;
+        }
+      }
+
+      /* ===== Gallery ===== */
+      .gallery-project {
+        border: 1px solid var(--grid-strong);
+        background: var(--cell);
+        overflow: hidden;
+      }
+
+      .gallery-project-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: 24px;
+        padding: 22px;
+        align-items: center;
+      }
+
+      .gallery-project-info h3 {
+        margin: 0 0 10px;
+        font-size: 19px;
+      }
+
+      .gallery-project-info p {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0 0 14px;
+      }
+
+      .gallery-project-tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .gallery-project-tools span {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        padding: 4px 8px;
+        border: 1px solid var(--grid);
+        background: var(--panel);
+        border-radius: 3px;
+      }
+
+      .gallery-preview {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+        border: 1px solid var(--grid);
+      }
+
+      .gallery-toggle {
+        border-top: 1px solid var(--grid);
+      }
+
+      .gallery-toggle summary {
+        padding: 14px 20px;
+        cursor: pointer;
+        color: var(--green-dark);
+        background: var(--panel);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        font-weight: 600;
+        list-style-position: inside;
+      }
+
+      .gallery-toggle summary:hover {
+        background: var(--green-tint);
+      }
+
+      .gallery-screenshots {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        border-top: 1px solid var(--grid);
+      }
+
+      .gallery-card {
+        border: 1px solid var(--grid);
+        background: var(--cell);
+        overflow: hidden;
+      }
+
+      .gallery-card img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border-bottom: 1px solid var(--grid);
+      }
+
+      .gallery-body {
+        padding: 12px 14px;
+      }
+
+      .gallery-body h4 {
+        margin: 0 0 5px;
+        font-size: 14px;
+      }
+
+      .gallery-body p {
+        margin: 0;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 680px) {
+        .gallery-project-header {
+          grid-template-columns: 1fr;
+        }
+
+        .gallery-screenshots {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ===== Certifications ===== */
+      .cert-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .cert-card {
+        background: var(--cell);
+        border: 1px solid var(--grid-strong);
+        padding: 20px;
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease;
+      }
+
+      .cert-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--green);
+      }
+
+      .cert-card h3 {
+        font-size: 16px;
+        margin: 0 0 8px;
+      }
+
+      .cert-card p {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 5px 0;
+      }
+
+      .cert-card .cert-issuer {
+        font-family: "IBM Plex Mono", monospace;
+        color: var(--green-dark);
+        font-size: 12px;
+      }
+
+      .cert-link {
+        display: inline-block;
+        margin-top: 12px;
+        color: var(--blue);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        text-decoration: none;
+      }
+
+      .cert-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 680px) {
+        .cert-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ===== Contact ===== */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 1px;
+        background: var(--grid-strong);
+        border: 1px solid var(--grid-strong);
+      }
+      .contact-cell {
+        background: var(--cell);
+        padding: 22px 20px;
+      }
+      .contact-cell .lbl {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        color: var(--green-dark);
+        display: block;
+        margin-bottom: 8px;
+      }
+      .contact-cell .val {
+        font-size: 15px;
+        font-weight: 500;
+        word-break: break-word;
+      }
+      .contact-cell a {
+        text-decoration: none;
+        color: var(--blue);
+      }
+      .contact-cell a:hover {
+        text-decoration: underline;
+      }
+
+      footer {
+        text-align: center;
+        padding: 30px 20px 40px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div class="titlebar">
+      <span class="fx">&nbsp;</span>
+      <span class="fname">PranavPatil_Portfolio.xlsx</span>
+      <span class="fpath">Data Analyst Workbook — Pune, India</span>
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Switch to dark mode"
+      >
+        <span class="theme-toggle-icon">☾</span
+        ><span class="theme-toggle-label">Dark</span>
+      </button>
+    </div>
+
+    <div class="formulabar">
+      <div class="cellref" id="cellref">A1</div>
+      <div class="fx-label">fx</div>
+      <div class="fx-content" id="fxcontent">
+        ="Welcome to Pranav Patil's Data Analyst portfolio"
+      </div>
+    </div>
+
+    <nav class="sheet-tabs" id="sheetTabs">
+      <div class="sheet-tab active" data-target="#about">Sheet1: About</div>
+      <div class="sheet-tab" data-target="#skills">Sheet2: Skills</div>
+      <div class="sheet-tab" data-target="#resume">Sheet3: Resume</div>
+      <div class="sheet-tab" data-target="#projects">Sheet4: Projects</div>
+      <div class="sheet-tab" data-target="#gallery">Sheet5: Gallery</div>
+      <div class="sheet-tab" data-target="#certifications">
+        Sheet6: Certifications
+      </div>
+      <div class="sheet-tab" data-target="#contact">Sheet7: Contact</div>
+    </nav>
+
+    <!-- HERO -->
+    <section
+      class="hero"
+      id="about"
+      data-cellref="B2"
+      data-fx='="Data Analyst passionate about turning raw numbers into decisions"'
+    >
+      <div class="sql-console reveal" id="sqlConsole">
+        <div class="sql-console-bar">
+          <span class="sql-dot r"></span><span class="sql-dot y"></span
+          ><span class="sql-dot g"></span>
+          <span class="sql-console-title">query_analyst.sql</span>
+          <button class="sql-run" id="sqlRun" type="button">▶ Run</button>
+        </div>
+        <div class="sql-body">
+          <div class="sql-line">
+            <span class="sql-lineno">1</span>
+            <span class="sql-code"
+              ><span class="cm"
+                >-- find the analyst behind this workbook</span
+              ></span
+            >
+          </div>
+          <div class="sql-line">
+            <span class="sql-lineno">2</span>
+            <span class="sql-code"
+              ><span class="kw">SELECT</span> name, role, location, status</span
+            >
+          </div>
+          <div class="sql-line">
+            <span class="sql-lineno">3</span>
+            <span class="sql-code"
+              ><span class="kw">FROM</span
+              ><span class="fn"> analysts</span></span
+            >
+          </div>
+          <div class="sql-line">
+            <span class="sql-lineno">4</span>
+            <span class="sql-code"
+              ><span class="kw">WHERE</span> name =<span class="str"
+                >'Pranav Patil'</span
+              >;<span class="sql-caret" id="sqlCaret"></span
+            ></span>
+          </div>
+        </div>
+        <div class="sql-result" id="sqlResult">
+          ▸ 1 row returned — name: Pranav Patil, role: Data Analyst, location:
+          Pune, status: open_to_work
+        </div>
+      </div>
+      <span class="eyebrow">Open to opportunities</span>
+      <div class="hero-grid">
+        <div class="hero-rowlabels">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+        </div>
+
+        <div class="hero-body">
+          <div class="hero-profile">
+            <div class="hero-profile-text">
+              <h1 class="name">Pranav Patil</h1>
+              <p class="role-line">
+                Data Analyst · Insights Analyst<span class="caret"></span>
+              </p>
+              <p class="hero-desc">
+                I am an MCA student interested in data analytics, with hands-on
+                project experience using Excel, SQL, Python (Pandas), and Power
+                BI. I enjoy exploring data, solving business questions, and
+                presenting useful findings through dashboards and analysis.
+              </p>
+            </div>
+
+            <div class="hero-photo">
+              <img src="./images/pranav.jpg" alt="Pranav Patil" />
+            </div>
+          </div>
+
+          <div class="hero-meta">
+            <span>📍 Pune, Maharashtra</span>
+            <span>✉️ pranavcpatil74@gmail.com</span>
+            <span>📞 +91 88301 53324</span>
+          </div>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#resume">Open Resume Sheet →</a>
+            <a
+              class="btn btn-ghost"
+              href="https://www.linkedin.com/in/pranav-patil-7b7972346/"
+              target="_blank"
+              rel="noopener"
+              >LinkedIn Profile</a
+            >
+            <a class="btn btn-ghost" href="#contact">Contact Me</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT DETAIL TABLE -->
+    <section
+      id="about-detail"
+      data-cellref="B14"
+      data-fx='="About Pranav — background and focus"'
+    >
+      <div class="sec-head">
+        <span class="range">A1:B6</span>
+        <h2>About Me</h2>
+      </div>
+      <div class="about-table reveal">
+        <div class="about-row">
+          <div class="k">NAME</div>
+          <div class="v">Pranav Patil</div>
+        </div>
+        <div class="about-row">
+          <div class="k">CURRENT_ROLE</div>
+          <div class="v">MCA Student | Aspiring Data Analyst</div>
+        </div>
+        <div class="about-row">
+          <div class="k">LOOKING_FOR</div>
+          <div class="v">
+            Entry-Level Data Analyst / Business Analyst opportunities
+          </div>
+        </div>
+        <div class="about-row">
+          <div class="k">LOCATION</div>
+          <div class="v">Pune, Maharashtra, India</div>
+        </div>
+        <div class="about-row">
+          <div class="k">FOCUS_AREAS</div>
+          <div class="v">
+            Excel, Power Query, MySQL, Python (Pandas), Power BI, data cleaning,
+            and dashboard development
+          </div>
+        </div>
+        <div class="about-row">
+          <div class="k">SOFT_SKILLS</div>
+          <div class="v">
+            Analytical Thinking, Problem Solving, Attention to Detail,
+            Communication, Team Collaboration
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section
+      id="skills"
+      data-cellref="D5"
+      data-fx='=COUNTA(Skills_Range) &amp; " skills logged"'
+    >
+      <div class="sec-head">
+        <span class="range">C1:D9</span>
+        <h2>Skills</h2>
+      </div>
+      <div class="skills-wrap reveal">
+        <div class="skill-panel">
+          <div class="panel-title">TECHNICAL_SKILLS</div>
+          <div class="chip-grid">
+            <span class="chip">Microsoft Excel</span>
+            <span class="chip">SQL / MySQL</span>
+            <span class="chip">Python</span>
+            <span class="chip blue">Pandas</span>
+            <span class="chip blue">Microsoft Power BI</span>
+            <span class="chip blue">DAX</span>
+            <span class="chip">Power Query</span>
+            <span class="chip">Data Cleaning</span>
+            <span class="chip">Data Analysis</span>
+            <span class="chip">Data Visualization</span>
+            <span class="chip">Data Modeling</span>
+            <span class="chip">Dashboard Building</span>
+          </div>
+        </div>
+        <div class="skill-panel">
+          <div class="panel-title">SOFT_SKILLS</div>
+          <div class="chip-grid">
+            <span class="chip amber">Problem Solving</span>
+            <span class="chip amber">Analytical Thinking</span>
+            <span class="chip amber">Attention to Detail</span>
+            <span class="chip amber">Communication</span>
+            <span class="chip amber">Team Collaboration</span>
+            <span class="chip amber">Time Management</span>
+            <span class="chip amber">Adaptability</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUME -->
+    <section
+      id="resume"
+      data-cellref="E1"
+      data-fx='="Professional resume and qualifications"'
+    >
+      <div class="sec-head">
+        <span class="range">E1:F4</span>
+        <h2>Resume</h2>
+      </div>
+
+      <div class="resume-card reveal">
+        <div class="resume-info">
+          <p class="resume-intro">
+            MCA student and aspiring Data Analyst with hands-on experience in
+            data cleaning, analysis, and dashboard development using Excel, SQL,
+            Python (Pandas), and Power BI.
+          </p>
+
+          <ul class="resume-highlights">
+            <li>Professional summary and contact information</li>
+            <li>Technical skills in Excel, SQL, Python, and Power BI</li>
+            <li>E-Commerce Sales & Business Performance Analysis project</li>
+            <li>Education and academic achievements</li>
+            <li>Courses and professional certifications</li>
+          </ul>
+
+          <p class="resume-note">
+            Updated resume for Entry-Level Data Analyst opportunities.
+          </p>
+        </div>
+
+        <div class="resume-download">
+          <div class="resume-pdf-icon">
+            <span>PDF</span>
+          </div>
+
+          <a
+            class="resume-download-btn"
+            href="./Pranav_Patil_Resume.pdf"
+            download
+          >
+            ↓ Download Resume
+          </a>
+
+          <a
+            class="resume-view-link"
+            href="./Pranav_Patil_Resume.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            View Resume
+          </a>
+
+          <span class="resume-free-text"> PDF · Free Download </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section
+      id="projects"
+      data-cellref="H8"
+      data-fx='="E-Commerce Sales & Business Performance Analysis"'
+    >
+      <div class="sec-head">
+        <span class="range">G1:J5</span>
+        <h2>Projects</h2>
+      </div>
+
+      <table class="proj-table reveal">
+        <colgroup>
+          <col style="width: 24%" />
+          <col style="width: 19%" />
+          <col style="width: 47%" />
+          <col style="width: 10%" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Tools</th>
+            <th>Description</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="proj-name">
+              E-Commerce Sales &amp; Business Performance Analysis
+            </td>
+
+            <td class="tools-list">
+              <span>Excel</span>
+              <span>Power Query</span>
+              <span>MySQL</span>
+              <span>Python</span>
+              <span>Pandas</span>
+              <span>Power BI</span>
+            </td>
+
+            <td>
+              Completed an end-to-end analysis of an e-commerce dataset
+              containing 5,000 orders, approximately 1,000 customers, and 200
+              products. Cleaned and analysed data using Excel, Power Query,
+              MySQL, and Python (Pandas), and developed a five-page interactive
+              Power BI dashboard to explore sales, products, customers, and
+              returns.
+            </td>
+
+            <td>
+              <span class="status-pill">Completed</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <a
+        class="cert-link"
+        href="https://github.com/pranavcpatil/Ecommerce-Sales-Business-Performance-Analysis.git"
+        target="_blank"
+        rel="noopener"
+      >
+        <i class="fab fa-github"></i> View on GitHub →
+      </a>
+    </section>
+
+    <!-- GALLERY -->
+    <section
+      id="gallery"
+      data-cellref="K12"
+      data-fx='="Project dashboard screenshots"'
+    >
+      <div class="sec-head">
+        <span class="range">K1:M4</span>
+        <h2>Project Gallery</h2>
+      </div>
+
+      <div class="gallery-project reveal">
+        <div class="gallery-project-header">
+          <div class="gallery-project-info">
+            <h3>E-Commerce Sales &amp; Business Performance Analysis</h3>
+
+            <p>
+              Explore the five-page Power BI dashboard created to analyse sales
+              performance, products, customers, and returns.
+            </p>
+
+            <div class="gallery-project-tools">
+              <span>Power BI</span>
+              <span>DAX</span>
+              <span>Data Analysis</span>
+            </div>
+          </div>
+
+          <img
+            class="gallery-preview"
+            src="https://github.com/user-attachments/assets/235daea4-f751-4684-abd0-607702f2346c"
+            alt="E-Commerce dashboard overview"
+          />
+        </div>
+
+        <details class="gallery-toggle">
+          <summary>View All 5 Dashboard Screenshots</summary>
+
+          <div class="gallery-screenshots">
+            <div class="gallery-card">
+              <img
+                src="https://github.com/user-attachments/assets/235daea4-f751-4684-abd0-607702f2346c"
+                alt="E-Commerce business performance overview dashboard"
+                loading="lazy"
+              />
+              <div class="gallery-body">
+                <h4>1. Business Performance — Overview</h4>
+                <p>
+                  Key business KPIs and an overall view of e-commerce
+                  performance.
+                </p>
+              </div>
+            </div>
+
+            <div class="gallery-card">
+              <img
+                src="https://github.com/user-attachments/assets/2d448ed4-7749-40b1-bd2c-e7584208513d"
+                alt="E-Commerce sales analysis dashboard"
+                loading="lazy"
+              />
+              <div class="gallery-body">
+                <h4>2. Sales Analysis</h4>
+                <p>Sales trends, revenue performance, and channel analysis.</p>
+              </div>
+            </div>
+
+            <div class="gallery-card">
+              <img
+                src="https://github.com/user-attachments/assets/e221d389-ff27-4a2a-b9ad-2d51ebcc959b"
+                alt="Product performance and profitability dashboard"
+                loading="lazy"
+              />
+              <div class="gallery-body">
+                <h4>3. Product Performance</h4>
+                <p>
+                  Product categories, top products, and profitability insights.
+                </p>
+              </div>
+            </div>
+
+            <div class="gallery-card">
+              <img
+                src="https://github.com/user-attachments/assets/32694da1-49d0-44dc-b4c7-b66d880ec6a9"
+                alt="Customer analysis dashboard"
+                loading="lazy"
+              />
+              <div class="gallery-body">
+                <h4>4. Customer Analysis</h4>
+                <p>Customer segments, demographics, and purchasing patterns.</p>
+              </div>
+            </div>
+
+            <div class="gallery-card">
+              <img
+                src="https://github.com/user-attachments/assets/76b38004-779f-465e-9c18-b476f788b819"
+                alt="E-Commerce returns analysis dashboard"
+                loading="lazy"
+              />
+              <div class="gallery-body">
+                <h4>5. Returns Analysis</h4>
+                <p>Returned orders and return-related business insights.</p>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section
+      id="certifications"
+      data-cellref="J12"
+      data-fx='="Professional certifications and courses"'
+    >
+      <div class="sec-head">
+        <span class="range">J1:L4</span>
+        <h2>Certifications</h2>
+      </div>
+
+      <div class="cert-grid reveal">
+        <div class="cert-card">
+          <h3>Ultimate Job-Ready AI-Powerd Data Analytics Course</h3>
+          <p class="cert-issuer">Code With HARRY</p>
+          <p>Completed: November, 2026</p>
+          <a
+            class="cert-link"
+            href="./certifications/CodeWithHarry_Data_Analytics_Certificate.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            View Certificate →
+          </a>
+        </div>
+
+        <div class="cert-card">
+          <h3>30 Days Power BI Micro Course</h3>
+          <p class="cert-issuer">SkillCourse</p>
+          <p>Completed: April, 2026</p>
+          <a
+            class="cert-link"
+            href="./certifications/SC-9D50A63FHL.png"
+            target="_blank"
+            rel="noopener"
+          >
+            View Certificate →
+          </a>
+        </div>
+
+        <div class="cert-card">
+          <h3>DATA ANALYTICS USING POWER BI WORKSHOP</h3>
+          <p class="cert-issuer">Techtip24</p>
+          <p>Completed: March, 2026</p>
+          <a
+            class="cert-link"
+            href="./certifications/_Pranav_Patil_Certificate.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            View Certificate →
+          </a>
+        </div>
+
+        <div class="cert-card">
+          <h3>SQL Developer</h3>
+          <p class="cert-issuer">Infosys Springboard</p>
+          <p>Completed: August 2025</p>
+          <a
+            class="cert-link"
+            href="./certifications/SQL_Developer_Certificate.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            View Certificate →
+          </a>
+        </div>
+
+        <div class="cert-card">
+          <h3>Data Visualisation</h3>
+          <p class="cert-issuer">Tata Forage</p>
+          <p>Completed: September, 2024</p>
+          <a
+            class="cert-link"
+            href="./certifications/Tata Group_CvdkxvsHRdJuWjyLP_completion_certificate.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            View Certificate →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section
+      id="contact"
+      data-cellref="N2"
+      data-fx='=HYPERLINK("mailto:pranavcpatil74@gmail.com","Email Pranav")'
+    >
+      <div class="sec-head">
+        <span class="range">N1:O3</span>
+        <h2>Contact</h2>
+      </div>
+      <div class="contact-grid reveal">
+        <div class="contact-cell">
+          <span class="lbl">EMAIL</span>
+          <div class="val">
+            <a href="mailto:pranavcpatil74@gmail.com"
+              >pranavcpatil74@gmail.com</a
+            >
+          </div>
+        </div>
+        <div class="contact-cell">
+          <span class="lbl">PHONE</span>
+          <div class="val"><a href="tel:+918830153324">+91 88301 53324</a></div>
+        </div>
+        <div class="contact-cell">
+          <span class="lbl">LOCATION</span>
+          <div class="val">Pune, Maharashtra, India</div>
+        </div>
+        <div class="contact-cell">
+          <span class="lbl">LINKEDIN</span>
+          <div class="val">
+            <a
+              href="https://www.linkedin.com/in/pranav-patil-7b7972346/"
+              target="_blank"
+              rel="noopener"
+              >pranav-patil-7b7972346</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      // Built as a living workbook — last saved September 2026 — more rows to
+      be added soon
+    </footer>
+
+    <script>
+      // Light / dark mode toggle (session-only — respects system preference on load)
+      const themeToggle = document.getElementById("themeToggle");
+      const toggleIcon = themeToggle.querySelector(".theme-toggle-icon");
+      const toggleLabel = themeToggle.querySelector(".theme-toggle-label");
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      function setTheme(mode) {
+        if (mode === "dark") {
+          document.body.setAttribute("data-theme", "dark");
+          toggleIcon.textContent = "☀";
+          toggleLabel.textContent = "Light";
+          themeToggle.setAttribute("aria-label", "Switch to light mode");
+        } else {
+          document.body.removeAttribute("data-theme");
+          toggleIcon.textContent = "☾";
+          toggleLabel.textContent = "Dark";
+          themeToggle.setAttribute("aria-label", "Switch to dark mode");
+        }
+      }
+
+      setTheme(prefersDark ? "dark" : "light");
+
+      themeToggle.addEventListener("click", () => {
+        const isDark = document.body.getAttribute("data-theme") === "dark";
+        setTheme(isDark ? "light" : "dark");
+      });
+
+      // Scroll progress bar (fills like a cell as the page fills up)
+      const progressBar = document.getElementById("scrollProgress");
+      function updateProgress() {
+        const h = document.documentElement;
+        const scrolled = h.scrollTop;
+        const height = h.scrollHeight - h.clientHeight;
+        progressBar.style.width =
+          height > 0 ? (scrolled / height) * 100 + "%" : "0%";
+      }
+      document.addEventListener("scroll", updateProgress, { passive: true });
+      updateProgress();
+
+      // Reveal-on-scroll for cards and tables
+      const revealEls = document.querySelectorAll(".reveal");
+      const revealIO = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in-view");
+              revealIO.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      revealEls.forEach((el) => revealIO.observe(el));
+
+      // SQL console: run button reveals the "query result" row
+      const sqlRun = document.getElementById("sqlRun");
+      const sqlResult = document.getElementById("sqlResult");
+      if (sqlRun && sqlResult) {
+        sqlRun.addEventListener("click", () => {
+          sqlResult.classList.toggle("show");
+        });
+        // Auto-run once shortly after load for a professional first impression
+        setTimeout(() => sqlResult.classList.add("show"), 900);
+      }
+
+      const tabs = document.querySelectorAll(".sheet-tab");
+      const sections = document.querySelectorAll("section[data-cellref]");
+      const cellref = document.getElementById("cellref");
+      const fxcontent = document.getElementById("fxcontent");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = document.querySelector(tab.dataset.target);
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = "#" + entry.target.id;
+              tabs.forEach((t) =>
+                t.classList.toggle(
+                  "active",
+                  t.dataset.target === id ||
+                    (id === "#about-detail" && t.dataset.target === "#about"),
+                ),
+              );
+              if (entry.target.dataset.cellref)
+                cellref.textContent = entry.target.dataset.cellref;
+              if (entry.target.dataset.fx)
+                fxcontent.textContent = entry.target.dataset.fx;
+            }
+          });
+        },
+        { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+      );
+
+      sections.forEach((s) => io.observe(s));
+    </script>
+  </body>
+</html>
